@@ -21,6 +21,12 @@ const paginateList = ({ list, page, limit }) => {
     }
 }
 
+const PublicFolderPath = path.join(__dirname, `../../${PUBLIC}`)
+
+if (!fs.existsSync(PublicFolderPath)) {
+    fs.mkdirSync(PublicFolderPath)
+}
+
 const ImagesFolderPath = path.join(__dirname, `../../${PUBLIC}/${IMAGES}`)
 
 if (!fs.existsSync(ImagesFolderPath)) {
