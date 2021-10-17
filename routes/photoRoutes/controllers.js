@@ -1,5 +1,6 @@
-const fsProm = require('fs/promises');
 const path = require('path');
+const fs = require('fs');
+const fsProm = fs.promises
 
 const paginateList = ({ list, page, limit }) => {
     const pageNum = +page || 0
@@ -19,11 +20,16 @@ const paginateList = ({ list, page, limit }) => {
     }
 }
 
+const ImagesFolderPath = path.join(__dirname, '../../public/images')
+
+if (!fs.existsSync(ImagesFolderPath)) {
+    fs.mkdirSync(ImagesFolderPath)
+}
+
 const getAllPhotos = async (req, res, next) => {
     try {
         const { page, limit } = req.query
-        const photoFolder = path.join(__dirname, '../../public/images')
-        const photoNames = await fsProm.readdir(photoFolder)
+        const photoNames = await fsProm.readdir(ImagesFolderPath)
 
         const paginate = paginateList({ list: photoNames, page, limit })
         paginate.photos = paginate.photos.map(name => `images/${name}`)
@@ -54,12 +60,11 @@ const postPhoto = async (req, res, next) => {
 
 const deleteAllPhotos = async (req, res, next) => {
     try {
-        const photoFolder = path.join(__dirname, '../../public/images')
-        const photoNames = await fsProm.readdir(photoFolder)
+        const photoNames = await fsProm.readdir(ImagesFolderPath)
 
         const unlinkPromises = []
         for (const photoName of photoNames) {
-            const photoPath = path.join(photoFolder, photoName)
+            const photoPath = path.join(ImagesFolderPath, photoName)
             unlinkPromises.push(fsProm.unlink(photoPath))
         }
 
