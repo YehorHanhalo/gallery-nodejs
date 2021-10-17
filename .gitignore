@@ -1,7 +1,5 @@
 # Logs
 
-public/images
-
 .DS*Store
 logs
 *.log
