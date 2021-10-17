@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const { PUBLIC, IMAGES } = require('../../utils/const')
 const fsProm = fs.promises
 
 const paginateList = ({ list, page, limit }) => {
@@ -20,7 +21,7 @@ const paginateList = ({ list, page, limit }) => {
     }
 }
 
-const ImagesFolderPath = path.join(__dirname, '../../public/images')
+const ImagesFolderPath = path.join(__dirname, `../../${PUBLIC}/${IMAGES}`)
 
 if (!fs.existsSync(ImagesFolderPath)) {
     fs.mkdirSync(ImagesFolderPath)
@@ -32,7 +33,7 @@ const getAllPhotos = async (req, res, next) => {
         const photoNames = await fsProm.readdir(ImagesFolderPath)
 
         const paginate = paginateList({ list: photoNames, page, limit })
-        paginate.photos = paginate.photos.map(name => `images/${name}`)
+        paginate.photos = paginate.photos.map(name => `${IMAGES}/${name}`)
         res.status(200).send(paginate);
     } catch (err) {
         res.status(400).send(err);
@@ -49,7 +50,7 @@ const postPhoto = async (req, res, next) => {
             return
         }
 
-        const photoPath = fileData.path.split('public/')[1]
+        const photoPath = fileData.path.split(`${PUBLIC}/`)[1]
 
         res.status(201).send({ path: photoPath });
     } catch (err) {
