@@ -17,6 +17,6 @@ const fileFilter = (req, file, cb) => {
     cb(null, ["image/png", "image/jpg", "image/jpeg"].includes(file.mimetype));
 }
 
-const multerMiddleware = multer({ storage: storageConfig, fileFilter: fileFilter }).single("photo")
+const multerMiddleware = multer({ storage: storageConfig, fileFilter: fileFilter }).array("photos")
 
 module.exports = multerMiddleware;

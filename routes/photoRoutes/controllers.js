@@ -49,16 +49,16 @@ const getAllPhotos = async (req, res, next) => {
 
 const postPhoto = async (req, res, next) => {
     try {
-        const fileData = req.file;
+        const fileList = req.files;
 
-        if(!fileData) {
+        if(!fileList.length) {
             res.status(406).send('Wrong MIME-type');
             return
         }
 
-        const photoPath = fileData.path.split(`${PUBLIC}/`)[1]
+        const photoPathList = fileList.map(file => file.path.split(`${PUBLIC}/`)[1])
 
-        res.status(201).send({ path: photoPath });
+        res.status(201).send({ path: photoPathList });
     } catch (err) {
         res.status(400).send('error');
         return console.error(err.message);
